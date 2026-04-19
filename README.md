@@ -1,4 +1,3 @@
-```markdown
 # Prácticos de Programación IV – Tecnicatura Universitaria en Programación (UTN)
 
 Resolución de los trabajos prácticos de la materia **Programación IV (2026)** en la **Universidad Tecnológica Nacional (UTN)**. Este repositorio está enfocado en el aprendizaje de arquitecturas escalables, desarrollo con Node.js, APIs y tecnologías modernas.
@@ -9,7 +8,7 @@ Resolución de los trabajos prácticos de la materia **Programación IV (2026)**
 
 | Nº | Nombre | Tecnologías / Temas principales | Estado |
 |----|--------|----------------------------------|--------|
-| **TP1** | Agenda de Contactos | Node.js, OOP, JSON Persistence, ESM | ✅ Completado |
+| **TP1** | Agenda de Contactos | Node.js, OOP, <br> JSON Persistence, ESM | ✅ Completado |
 | **TP2** | (Próximamente) | ... | ⏳ Pendiente |
 | **TP3** | (Próximamente) | ... | ⏳ Pendiente |
 
@@ -24,7 +23,7 @@ Resolución de los trabajos prácticos de la materia **Programación IV (2026)**
 ---
 
 ## 🧑‍💻 Autor
-**José Augusto Orellana** Estudiante de la Tecnicatura Universitaria en Programación – UTN (San Miguel de Tucumán).
+**José Augusto Orellana** - Estudiante de la Tecnicatura Universitaria en Programación – UTN (San Miguel de Tucumán).
 
 ---
 
