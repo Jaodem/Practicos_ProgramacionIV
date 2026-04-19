@@ -38,3 +38,32 @@ class Contact {
     console.log(`Email    : ${this.lastName}`);
   }
 }
+
+class Phonebook {
+  constructor(
+    contacts = [],
+    lastId = 0
+  ) {
+    this.contacts = contacts;
+    this.lastId = lastId;
+  }
+  
+  addContact(contact) {
+    this.lastId++;
+    contact.id = this.lastId;
+    this.contacts.push(contact);
+  }
+  
+  list() {
+    return [...this.contacts].sort((a, b) => {
+      // Comparo los apellidos
+      const lastCompare = a.lastName.localeCompare(b.lastName);
+      
+      // Si los apellidos son distintos devuelvo ese resultado
+      if (lastCompare !== 0) return lastCompare;
+      
+      // Si son iguales, comparo por nombres
+      return a.firstName.localeCompare(b.firstName);
+    });
+  }
+}
