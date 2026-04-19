@@ -1,4 +1,4 @@
-import { prompt } from "./io.js";
+import { prompt, write, read } from "./io.js";
 
 class Contact {
   constructor({
@@ -65,5 +65,26 @@ class Phonebook {
       // Si son iguales, comparo por nombres
       return a.firstName.localeCompare(b.firstName);
     });
+  }
+  
+  async save() {
+    const data = JSON.stringify(
+      {
+        lastId: this.lastId,
+        contacts: this.contacts
+      }, null, 2
+    );
+    await write(data);
+  }
+  
+  static async load() {
+    try {
+      const jsonString = await read();
+      const data = JSON.parse(jsonString);
+      const contacts = (data.contacts ?? []).map(c => new Contact(c));
+      return new Phonebook(contacts, data.lastId ?? 0);
+    } catch {
+      return new Phonebook();
+    }
   }
 }
