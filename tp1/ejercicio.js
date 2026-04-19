@@ -112,4 +112,15 @@ class Phonebook {
     }
     return false;
   }
+  
+  update(id, data) {
+    const foundContact = this.findById(id);
+    
+    if (foundContact) {
+      Object.assign(foundContact, data);
+      return true;
+    }
+    
+    return false;
+  }
 }
