@@ -87,4 +87,29 @@ class Phonebook {
       return new Phonebook();
     }
   }
+  
+  find(text) {
+    const query = text.toLowerCase();
+    return this.contacts.filter(c =>
+      c.firstName.toLowerCase().includes(query) ||
+      c.lastName.toLowerCase().includes(query) ||
+      c.email.toLowerCase().includes(query) ||
+      String(c.phone).toLowerCase().includes(query)
+    );
+  }
+  
+  findById(id) {
+    const foundContact = this.contacts.find(c => c.id == id);
+    return foundContact;
+  }
+  
+  delete(id) {
+    const idx = this.contacts.findIndex(c => c.id == id);
+    
+    if (idx >= 0) {
+      this.contacts.splice(idx, 1);
+      return true;
+    }
+    return false;
+  }
 }
