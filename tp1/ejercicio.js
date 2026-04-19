@@ -30,12 +30,12 @@ class Contact {
   
   // Muestra los datos de forma detallada
   displayData() {
-    console.log(`ID       : ${this.lastName}`);
-    console.log(`Name     : ${this.lastName}`);
+    console.log(`ID       : ${this.id}`);
+    console.log(`Name     : ${this.firstName}`);
     console.log(`Last Name: ${this.lastName}`);
-    console.log(`Age      : ${this.lastName}`);
-    console.log(`Phone    : ${this.lastName}`);
-    console.log(`Email    : ${this.lastName}`);
+    console.log(`Age      : ${this.age}`);
+    console.log(`Phone    : ${this.phone}`);
+    console.log(`Email    : ${this.email}`);
   }
 }
 
@@ -153,28 +153,78 @@ async function menu() {
         break;
       
       case "2":
-        console.log("\n=== Agregar Contacto ===");
-        const firstName = await prompt("Nombre  : ");
-        const lastName = await prompt("Apellido : ");
-        
-        if (!firstName && !lastName) console.log("Error: El contacto debe tener al menos un nombre o apellido.");
-        else {
-          const age = await prompt("Edad  : ");
-          const phone = await prompt("Teléfono  : ");
-          const email = await prompt("Email : ");
+        {
+          console.log("\n=== Agregar Contacto ===");
+          const firstName = await prompt("Nombre  : ");
+          const lastName = await prompt("Apellido : ");
           
-          const contact = new Contact({ firstName, lastName, age, phone, email });
-          phonebook.addContact(contact);
-          await phonebook.save();
-          console.log("✅ Contacto agregado correctamente.");
+          if (!firstName && !lastName) console.log("Error: El contacto debe tener al menos un nombre o apellido.");
+          else {
+            const age = await prompt("Edad  : ");
+            const phone = await prompt("Teléfono  : ");
+            const email = await prompt("Email : ");
+            
+            const contact = new Contact({
+              firstName,
+              lastName,
+              age: parseInt(age) || 0,
+              phone,
+              email
+            });
+            phonebook.addContact(contact);
+            await phonebook.save();
+            console.log("✅ Contacto agregado correctamente.");
+          }
         }
         await prompt("\nPresioná enter para continuar...");
         break;
       
       case "3":
+        const idEdit = await prompt("ID a editar: ");
+        const contact = phonebook.findById(idEdit);
+        
+        if (!contact) console.log("ID no encontrado.");
+        else {
+          console.log("Editando:");
+          contact.displayData();
+          
+          const firstName = await prompt("Nombre  : ");
+          const lastName = await prompt("Apellido : ");
+          const age = await prompt("Edad  : ");
+          const phone = await prompt("Teléfono  : ");
+          const email = await prompt("Email : ");
+          
+          phonebook.update(idEdit, {
+            firstName: firstName || contact.firstName,
+            lastName: lastName || contact.lastName,
+            age: parseInt(age) || contact.age,
+            phone: phone || contact.phone,
+            email: email || contact.email
+          });
+          
+          await phonebook.save();
+          console.log("Contacto editado correctamente.");
+        }
+        
+        await prompt("\nPresioná enter para continuar...");
         break;
       
       case "4":
+        const idDel = await prompt("ID a borrar: ");
+        const deleted = phonebook.findById(idDel);
+        
+        if (deleted) {
+          console.log("Contacto a borrar.");
+          deleted.displayData();
+          const confirm = await prompt("¿Estás seguro que querés borrar este contacto? (s/n): ");
+          
+          if (confirm.trim().toLowerCase() === "s") {
+            phonebook.delete(idDel);
+            await phonebook.save();
+            console.log("Contacto borrado exitosamente.");
+          } else console.log("Operación cancelada.");
+        } else console.log("ID no encontrado.");
+        await prompt("\nPresioná enter para continuar...");
         break;
       
       case "5":
