@@ -124,3 +124,84 @@ class Phonebook {
     return false;
   }
 }
+
+async function menu() {
+  let phonebook = await Phonebook.load();
+  
+  while (true) {
+    console.clear();
+    console.clear();
+    console.log("╔══════════════════════════════════════╗");
+    console.log("║         AGENDA DE CONTACTOS          ║");
+    console.log("╠══════════════════════════════════════║");
+    console.log("║ 1.  Listar contactos                 ║");
+    console.log("║ 2.  Agregar contacto                 ║");
+    console.log("║ 3.  Editar contacto                  ║");
+    console.log("║ 4.  Borrar contacto                  ║");
+    console.log("║ 5.  Buscar contacto por Contenido    ║");
+    console.log("║ 0.  Salir                            ║");
+    console.log("╚══════════════════════════════════════╝");
+    const option = await prompt("\nSeleccione una opción (0 - 5): ");
+    console.log("─────────────────────────────────────────────");
+    switch (option) {
+      case "1":
+        console.log("\n=== Lista de Contactos ===");
+        console.log("ID Nombre Completo        Edad  Teléfono        Email");
+        console.log("-- ---------------------  ----  --------------  -------------------");
+        phonebook.list().forEach(c => console.log(c.toString()));
+        await prompt("\nPresioná enter para continuar...");
+        break;
+      
+      case "2":
+        console.log("\n=== Agregar Contacto ===");
+        const firstName = await prompt("Nombre  : ");
+        const lastName = await prompt("Apellido : ");
+        
+        if (!firstName && !lastName) console.log("Error: El contacto debe tener al menos un nombre o apellido.");
+        else {
+          const age = await prompt("Edad  : ");
+          const phone = await prompt("Teléfono  : ");
+          const email = await prompt("Email : ");
+          
+          const contact = new Contact({ firstName, lastName, age, phone, email });
+          phonebook.addContact(contact);
+          await phonebook.save();
+          console.log("✅ Contacto agregado correctamente.");
+        }
+        await prompt("\nPresioná enter para continuar...");
+        break;
+      
+      case "3":
+        break;
+      
+      case "4":
+        break;
+      
+      case "5":
+        const query = await prompt("Buscar: ");
+        const foundContact = phonebook.find(query);
+        
+        if (foundContact.length > 0) {
+          console.log("Resultados encontrados:");
+          foundContact.forEach(c => {
+            c.displayData();
+            console.log("----------------------------");
+          });
+        } else {
+          console.log("No se encontraron contactos.");
+        }
+        await prompt("\nPresioná enter para continuar...");
+        break;
+      
+      case "0":
+        console.log("Saliendo...");
+        return;
+      
+      default:
+        console.log("Opción inválida.");
+        await prompt("\nPresioná enter para continura...");
+    }
+  }
+}
+
+menu();
