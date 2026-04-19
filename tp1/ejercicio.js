@@ -146,9 +146,17 @@ async function menu() {
     switch (option) {
       case "1":
         console.log("\n=== Lista de Contactos ===");
-        console.log("ID Nombre Completo        Edad  Teléfono        Email");
-        console.log("-- ---------------------  ----  --------------  -------------------");
-        phonebook.list().forEach(c => console.log(c.toString()));
+        const contacts = phonebook.list();
+        
+        if (contacts.length === 0) {
+          console.log("╔═══════════════════════════════════╗");
+          console.log("║       La agenda esta vacía.       ║");
+          console.log("╚═══════════════════════════════════╝");
+        } else {
+          console.log("ID Nombre Completo        Edad Teléfono       Email");
+          console.log("-- ---------------------- ---- -------------- -------------------");
+          phonebook.list().forEach(c => console.log(c.toString()));
+        }
         await prompt("\nPresioná enter para continuar...");
         break;
       
@@ -167,12 +175,13 @@ async function menu() {
             const contact = new Contact({
               firstName,
               lastName,
-              age: parseInt(age) || 0,
+              age: Number(age) || 0,
               phone,
               email
             });
             phonebook.addContact(contact);
             await phonebook.save();
+            console.log("─────────────────────────────────────────────");
             console.log("✅ Contacto agregado correctamente.");
           }
         }
@@ -180,65 +189,111 @@ async function menu() {
         break;
       
       case "3":
-        const idEdit = await prompt("ID a editar: ");
-        const contact = phonebook.findById(idEdit);
-        
-        if (!contact) console.log("ID no encontrado.");
-        else {
-          console.log("Editando:");
-          contact.displayData();
+        {
+          console.log("\n=== Editar Contacto ===");
+          const contacts = phonebook.list();
           
-          const firstName = await prompt("Nombre  : ");
-          const lastName = await prompt("Apellido : ");
-          const age = await prompt("Edad  : ");
-          const phone = await prompt("Teléfono  : ");
-          const email = await prompt("Email : ");
           
-          phonebook.update(idEdit, {
-            firstName: firstName || contact.firstName,
-            lastName: lastName || contact.lastName,
-            age: parseInt(age) || contact.age,
-            phone: phone || contact.phone,
-            email: email || contact.email
-          });
-          
-          await phonebook.save();
-          console.log("Contacto editado correctamente.");
+          if (contacts.length === 0) {
+            console.log("╔═══════════════════════════════════╗");
+            console.log("║       La agenda esta vacía.       ║");
+            console.log("╚═══════════════════════════════════╝");
+          } else {
+            const idEdit = await prompt("ID a editar: ");
+            const contact = phonebook.findById(idEdit);
+            
+            if (!contact) console.log("ID no encontrado.");
+            else {
+              console.log("─────────────────────────────────────────────");
+              console.log("Editando:");
+              contact.displayData();
+              
+              console.log("─────────────────────────────────────────────");
+              
+              const firstName = await prompt("Nombre  : ");
+              const lastName = await prompt("Apellido : ");
+              const age = await prompt("Edad  : ");
+              const phone = await prompt("Teléfono  : ");
+              const email = await prompt("Email : ");
+              
+              phonebook.update(idEdit, {
+                firstName: firstName || contact.firstName,
+                lastName: lastName || contact.lastName,
+                age: Number(age) || contact.age,
+                phone: phone || contact.phone,
+                email: email || contact.email
+              });
+              
+              console.log("─────────────────────────────────────────────");
+              await phonebook.save();
+              console.log("Contacto editado correctamente.");
+            }
+          }
         }
         
         await prompt("\nPresioná enter para continuar...");
         break;
       
       case "4":
-        const idDel = await prompt("ID a borrar: ");
-        const deleted = phonebook.findById(idDel);
-        
-        if (deleted) {
-          console.log("Contacto a borrar.");
-          deleted.displayData();
-          const confirm = await prompt("¿Estás seguro que querés borrar este contacto? (s/n): ");
+        {
+          console.log("\n=== Borrar Contacto ===");
+          const contacts = phonebook.list();
           
-          if (confirm.trim().toLowerCase() === "s") {
-            phonebook.delete(idDel);
-            await phonebook.save();
-            console.log("Contacto borrado exitosamente.");
-          } else console.log("Operación cancelada.");
-        } else console.log("ID no encontrado.");
+          if (contacts.length === 0) {
+            console.log("╔═══════════════════════════════════╗");
+            console.log("║       La agenda esta vacía.       ║");
+            console.log("╚═══════════════════════════════════╝");
+          } else {
+            const idDel = await prompt("ID a borrar: ");
+            const deleted = phonebook.findById(idDel);
+            
+            if (deleted) {
+              console.log("─────────────────────────────────────────────");
+              console.log("Contacto a borrar.");
+              console.log("─────────────────────────────────────────────");
+              deleted.displayData();
+              console.log("─────────────────────────────────────────────");
+              const confirm = await prompt("¿Estás seguro que querés borrar este contacto? (s/n): ");
+              console.log("─────────────────────────────────────────────");
+              
+              if (confirm.trim().toLowerCase() === "s") {
+                phonebook.delete(idDel);
+                await phonebook.save();
+                console.log("Contacto borrado exitosamente.");
+              } else console.log("Operación cancelada.");
+            } else console.log("ID no encontrado.");
+            
+          }
+        }
         await prompt("\nPresioná enter para continuar...");
         break;
       
       case "5":
-        const query = await prompt("Buscar: ");
-        const foundContact = phonebook.find(query);
-        
-        if (foundContact.length > 0) {
-          console.log("Resultados encontrados:");
-          foundContact.forEach(c => {
-            c.displayData();
-            console.log("----------------------------");
-          });
-        } else {
-          console.log("No se encontraron contactos.");
+        {
+          console.log("\n=== Buscar Contacto ===");
+          const contacts = phonebook.list();
+          
+          if (contacts.length === 0) {
+            console.log("╔═══════════════════════════════════╗");
+            console.log("║       La agenda esta vacía.       ║");
+            console.log("╚═══════════════════════════════════╝");
+          } else {
+            const query = await prompt("Buscar: ");
+            const foundContact = phonebook.find(query);
+            
+            if (foundContact.length > 0) {
+              console.log("─────────────────────────────────────────────");
+              console.log("Resultados encontrados:");
+              foundContact.forEach(c => {
+                c.displayData();
+                console.log("----------------------------");
+              });
+            } else {
+              console.log("─────────────────────────────────────────────");
+              console.log("No se encontraron contactos.");
+              console.log("─────────────────────────────────────────────");
+            }
+          }
         }
         await prompt("\nPresioná enter para continuar...");
         break;
@@ -248,7 +303,9 @@ async function menu() {
         return;
       
       default:
-        console.log("Opción inválida.");
+        console.log("╔══════════════════════════════════╗");
+        console.log("║         Opción inválida.         ║");
+        console.log("╚══════════════════════════════════╝");
         await prompt("\nPresioná enter para continura...");
     }
   }
