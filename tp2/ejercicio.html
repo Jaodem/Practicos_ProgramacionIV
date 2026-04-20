@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TP2 -  Agenda de Contactos</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+        <link rel="stylesheet" href="ejercicio.css">
+        <script type="module" src="ejercicio.js"></script>
+    </head>
+    <body>
+        <main class="container">
+            <header>
+                <h1>Agenda de Contactos</h1>
+                <section id="controls">
+                    <fieldset role="group">
+                        <input type="search" id="search-input" placeholder="Buscar contacto..." aria-label="Buscar">
+                        <button id="add-contact-btn">Agregar</button>
+                    </fieldset>
+                </section>
+            </header>
+            
+            <div id="contact-list"></div>
+            
+        </main>
+        
+        <dialog id="contact-dialog">
+            <article>
+                <header>
+                    <h3 id="dialog-title">Nuevo Contacto</h3>
+                </header>
+                <form id="contact-form">
+                    <input type="hidden" id="contact-id">
+                        
+                    <label for="first-name">Nombre</label>
+                    <input type="text" id="first-name" name="first-name" required>
+                    
+                    <label for="last-name">Apellido</label>
+                    <input type="text" id="last-name" name="last-name" required>
+                        
+                    <label for="phone">Teléfono</label>
+                    <input type="tel" id="phone" name="phone" required>
+                        
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                        
+                    <footer>
+                        <button type="button" class="secondary" id="cancel-btn">Cancelar</button>
+                        <button type="submit" id="save-btn">Guardar</button>
+                    </footer>
+                </form>
+            </article>
+        </dialog>
+    </body>
+</html>
