@@ -1,0 +1,10 @@
+#contact-form footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+#contact-form footer button {
+    width: auto;
+    margin-bottom: 0;
+}

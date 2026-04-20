@@ -11,11 +11,15 @@
     <body>
         <main class="container">
             <header>
-                <h1>Agenda de Contactos</h1>
+                <h1>
+                    Agenda de Contactos
+                </h1>
                 <section id="controls">
                     <fieldset role="group">
                         <input type="search" id="search-input" placeholder="Buscar contacto..." aria-label="Buscar">
-                        <button id="add-contact-btn">Agregar</button>
+                        <button id="add-contact-btn">
+                            Agregar
+                        </button>
                     </fieldset>
                 </section>
             </header>
@@ -27,26 +31,44 @@
         <dialog id="contact-dialog">
             <article>
                 <header>
-                    <h3 id="dialog-title">Nuevo Contacto</h3>
+                    <h3 id="dialog-title">
+                        Nuevo Contacto
+                    </h3>
                 </header>
                 <form id="contact-form">
                     <input type="hidden" id="contact-id">
                         
-                    <label for="first-name">Nombre</label>
-                    <input type="text" id="first-name" name="first-name" required>
-                    
-                    <label for="last-name">Apellido</label>
-                    <input type="text" id="last-name" name="last-name" required>
+                    <div class="grid">
+                        <label for="first-name">
+                            Nombre
+                            <input type="text" id="first-name" name="first-name" required>
+                        </label>
                         
-                    <label for="phone">Teléfono</label>
-                    <input type="tel" id="phone" name="phone" required>
+                        <label for="last-name">
+                            Apellido
+                            <input type="text" id="last-name" name="last-name" required>
+                        </label>
+                    </div>
                         
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                    <div class="grid">
+                        <label for="phone">
+                            Teléfono
+                            <input type="tel" id="phone" name="phone" required>
+                        </label>
+                            
+                        <label for="email">
+                            Email
+                            <input type="email" id="email" name="email" required>
+                        </label>
+                    </div>
                         
-                    <footer>
-                        <button type="button" class="secondary" id="cancel-btn">Cancelar</button>
-                        <button type="submit" id="save-btn">Guardar</button>
+                    <footer class="grid">
+                        <button type="button" class="secondary" id="cancel-btn">
+                            Cancelar
+                        </button>
+                        <button type="submit" id="save-btn">
+                            Guardar
+                        </button>
                     </footer>
                 </form>
             </article>
