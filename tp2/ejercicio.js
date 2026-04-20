@@ -44,11 +44,57 @@ class Agenda {
   }
 }
 
+const INITIAL_CONTACTS = [
+  { firstName: "Ana", lastName: "García", phone: "381 555-1001", email: "ana.garcia@mail.com" },
+  { firstName: "José", lastName: "Muñoz", phone: "381 555-1002", email: "jose.munoz@mail.com" },
+  { firstName: "Lucía", lastName: "Pérez", phone: "381 555-1003", email: "lucia.perez@mail.com" },
+  { firstName: "Martín", lastName: "Gómez", phone: "381 555-1004", email: "martin.gomez@mail.com" },
+  { firstName: "Sofía", lastName: "Díaz", phone: "381 555-1005", email: "sofia.diaz@mail.com" },
+  { firstName: "Andrés", lastName: "Núñez", phone: "381 555-1006", email: "andres.nunez@mail.com" },
+  { firstName: "Camila", lastName: "Rodríguez", phone: "381 555-1007", email: "camila.rodriguez@mail.com" },
+  { firstName: "Nicolás", lastName: "Álvarez", phone: "381 555-1008", email: "nicolas.alvarez@mail.com" },
+  { firstName: "Valentina", lastName: "Sánchez", phone: "381 555-1009", email: "valentina.sanchez@mail.com" },
+  { firstName: "Diego", lastName: "Fernández", phone: "381 555-1010", email: "diego.fernandez@mail.com" }
+];
+
 document.addEventListener("DOMContentLoaded", () => {
   // Se capturan los elementos del DOM
   const addBtn = document.getElementById("add-contact-btn");
   const contactDialog = document.getElementById("contact-dialog");
   const cancelBtn = document.getElementById("cancel-btn");
+  
+  const agenda = new Agenda();
+  const contactList = document.getElementById('contact-list');
+  
+  // Se cargan los contactos iniciales en la lógica.
+  INITIAL_CONTACTS.forEach(data => agenda.add(data));
+  console.log("Contactos en agenda:", agenda.all);
+  
+  // Función de renderizado: Borra la lista actual y la vuelve a dibujar
+  // Transforma objetos JS en elementos HTML
+  const render = () => {
+    contactList.innerHTML = ''; // Se limpia la pantalla
+    
+    agenda.all.forEach(contact => {
+      const article = document.createElement('article');
+      // Se usa Template Literals para armar la tarjeta
+      article.innerHTML = `
+        <header>
+          <strong>${contact.lastName.toUpperCase()}, ${contact.firstName}</strong>
+        </header>
+        <p>📞 ${contact.phone}</p>
+        <p>📧 ${contact.email}</p>
+        <footer class="grid">
+          <button class="outline" onclick="console.log('Editar', ${contact.id})">✏️</button>
+          <button class="outline contrast" onclick="console.log('Borrar', ${contact.id})">🗑️</button>
+        </footer>
+      `;
+      contactList.appendChild(article);
+    });
+  };
+  
+  // Se llama a render
+  render();
 
   // Evento para abrir el modal
   addBtn.addEventListener("click", () => {
