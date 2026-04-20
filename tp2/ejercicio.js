@@ -66,6 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const agenda = new Agenda();
   const contactList = document.getElementById('contact-list');
   
+  const contactForm = document.getElementById('contact-form')
+  
   // Se cargan los contactos iniciales en la lógica.
   INITIAL_CONTACTS.forEach(data => agenda.add(data));
   console.log("Contactos en agenda:", agenda.all);
@@ -99,6 +101,33 @@ document.addEventListener("DOMContentLoaded", () => {
   // Evento para abrir el modal
   addBtn.addEventListener("click", () => {
     contactDialog.showModal();
+  });
+  
+  // Evento cuando se envía el formulario
+  contactForm.addEventListener('submit', (event) => {
+    // Se evita que la página se recargue
+    event.preventDefault();
+    
+    // Se capturan los datos usando FOrmData
+    const formData = new FormData(contactForm);
+    
+    // Se prepara el objeto con la nomenclatura que espera la clase
+    const contactData = {
+      firstName: formData.get('first-name'),
+      lastName: formData.get('last-name'),
+      phone: formData.get('phone'),
+      email: formData.get('email')
+    };
+    
+    // Se agrega el contacto
+    agenda.add(contactData);
+    
+    // Se limpia el formulario y se cierra el modal
+    contactForm.reset();
+    contactDialog.close();
+    
+    // Se vuelve a dibujar la lista completa
+    render();
   });
 
   // Evento para cerrar el modal
