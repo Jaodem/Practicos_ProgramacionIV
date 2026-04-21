@@ -16,7 +16,7 @@ class Agenda {
   }
 
   add(data) {
-    const id = Date.now();
+    const id = String(Date.now() + Math.floor(Math.random() * 1000));
     const newContact = new Contact(
       id,
       data.firstName,
@@ -60,6 +60,24 @@ class Agenda {
         normalizerText(field).includes(cleanQuery)
       );
     });
+  }
+  
+  delete(id) {
+    this.#contacts = this.#contacts.filter(c => String(c.id) !== String(id));
+  }
+  
+  update(id, data) {
+    const index = this.#contacts.findIndex(c => String(c.id) === String(id));
+    if (index !== -1) {
+      this.#contacts[index] = new Contact(
+        id,
+        data.firstName,
+        data.lastName,
+        data.phone,
+        data.email
+      );
+      this.#sort();
+    }
   }
 }
 
@@ -116,8 +134,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <p>📞 ${contact.phone}</p>
         <p>📧 ${contact.email}</p>
         <footer class="grid">
-          <button class="outline" onclick="console.log('Editar', ${contact.id})">✏️</button>
-          <button class="outline contrast" onclick="console.log('Borrar', ${contact.id})">🗑️</button>
+          <button class="outline" data-id="${contact.id}">✏️</button>
+          <button class="outline contrast" data-id="${contact.id}">🗑️</button>
         </footer>
       `;
       contactList.appendChild(article);
@@ -137,6 +155,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Evento para abrir el modal
   addBtn.addEventListener("click", () => {
+    document.getElementById('contact-id').value = "";
+    document.getElementById('dialog-title').innerText = "Nuevo Contacto";
+    contactForm.reset();
     contactDialog.showModal();
   });
   
@@ -144,6 +165,9 @@ document.addEventListener("DOMContentLoaded", () => {
   contactForm.addEventListener('submit', (event) => {
     // Se evita que la página se recargue
     event.preventDefault();
+    
+    // Se captura el ID del campo oculto
+    const id = document.getElementById('contact-id').value;
     
     // Se capturan los datos usando FOrmData
     const formData = new FormData(contactForm);
@@ -156,11 +180,18 @@ document.addEventListener("DOMContentLoaded", () => {
       email: formData.get('email')
     };
     
-    // Se agrega el contacto
-    agenda.add(contactData);
+    if (id) {
+      // Si hay un ID se llama al método actualizar
+      agenda.update(id, contactData);
+    } else {
+      // Si no hay ID, es porque el usuario apretó "Agregar"
+      agenda.add(contactData);
+    }
     
-    // Se limpia el formulario y se cierra el modal
+    // Se limpia total
     contactForm.reset();
+    document.getElementById('contact-id').value = ""; // Se vacía el ID
+    document.getElementById('dialog-title').innerText = "Nuevo Contacto"; // Se resetea el título
     contactDialog.close();
     
     // Se vuelve a dibujar la lista completa
@@ -170,5 +201,35 @@ document.addEventListener("DOMContentLoaded", () => {
   // Evento para cerrar el modal
   cancelBtn.addEventListener("click", () => {
     contactDialog.close();
+  });
+  
+  contactList.addEventListener('click', (e) => {
+    // Se identifica que botón se presionó
+    const btn = e.target.closest('button');
+    
+    if (!btn) return; // Si no se toca un botón no se hace nada
+    
+    const id = btn.dataset.id;
+    
+    // Si el botón tiene la clase 'contrast', es el de borrar
+    if (btn.classList.contains('contrast')) {
+      if (confirm("¿Seguro que querés borrar este contacto?")) {
+        agenda.delete(id);
+        render();
+      }
+    } else {
+      const contact = agenda.all.find(c => String(c.id) === String(id));
+      if (contact) {
+        // Se cargan los datos en el formulario
+        document.getElementById('contact-id').value = contact.id;
+        document.getElementById('first-name').value = contact.firstName;
+        document.getElementById('last-name').value = contact.lastName;
+        document.getElementById('phone').value = contact.phone;
+        document.getElementById('email').value = contact.email;
+        
+        document.getElementById('dialog-title').innerText = "Editar Contacto";
+        contactDialog.showModal();
+      }
+    }
   });
 });
