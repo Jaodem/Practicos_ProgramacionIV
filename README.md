@@ -9,16 +9,16 @@ Resolución de los trabajos prácticos de la materia **Programación IV (2026)**
 | Nº | Nombre | Tecnologías / Temas principales | Estado |
 |----|--------|----------------------------------|--------|
 | **TP1** | Agenda de Contactos | Node.js, OOP, <br> JSON Persistence, ESM | ✅ Completado |
-| **TP2** | (Próximamente) | ... | ⏳ Pendiente |
+| **TP2** | Agenda Web (SPA) | DOM, OOP, Pico.css, <br> ES Modules, Search Filter | ✅ Completado |
 | **TP3** | (Próximamente) | ... | ⏳ Pendiente |
 
 ---
 
 ## 🛠️ Tecnologías y Herramientas Generales
-- **Lenguajes**: JavaScript (Node.js), TypeScript.
+- **Lenguajes y Web**: JavaScript (Node.js/Browser), TypeScript, HTML5, CSS3 (Pico.css).
 - **Entorno**: Linux (Fedora/Arch) utilizando el editor **Zed**.
+- **Conceptos**: Programación Orientada a Objetos (OOP), Manipulación del DOM, Persistencia de datos y Arquitecturas SPA.
 - **Versionado**: Git / GitHub con flujo de commits atómicos.
-- **Arquitectura**: Programación Orientada a Objetos y patrones de persistencia modernos.
 
 ---
 
