@@ -42,7 +42,35 @@ class Agenda {
   get all() {
     return [...this.#contacts];
   }
+  
+  find(query) {
+    const cleanQuery = normalizerText(query);
+    if (!cleanQuery) return this.all; // Si no hay búsqueda, devuelve todos
+    
+    return this.#contacts.filter(contact => {
+      // Se busca en todos los campos relevantes
+      const searchFields = [
+        contact.firstName,
+        contact.lastName,
+        contact.phone,
+        contact.email
+      ];
+      
+      return searchFields.some(field =>
+        normalizerText(field).includes(cleanQuery)
+      );
+    });
+  }
 }
+
+// Función para limpiar el texto para comparaciones (normalizar)
+const normalizerText = (text) => {
+  return text
+    .toLowerCase()
+    .normalize("NFD") // Separa el acento de la letra
+    .replace(/[\u0300-\u036f]/g, "") // Elimina los acentos
+    .trim();
+};
 
 const INITIAL_CONTACTS = [
   { firstName: "Ana", lastName: "García", phone: "381 555-1001", email: "ana.garcia@mail.com" },
@@ -66,18 +94,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const agenda = new Agenda();
   const contactList = document.getElementById('contact-list');
   
-  const contactForm = document.getElementById('contact-form')
+  const contactForm = document.getElementById('contact-form');
+  
+  const searchInput = document.getElementById('search-input');
   
   // Se cargan los contactos iniciales en la lógica.
   INITIAL_CONTACTS.forEach(data => agenda.add(data));
-  console.log("Contactos en agenda:", agenda.all);
   
   // Función de renderizado: Borra la lista actual y la vuelve a dibujar
   // Transforma objetos JS en elementos HTML
-  const render = () => {
+  const render = (contacts = agenda.all) => {
     contactList.innerHTML = ''; // Se limpia la pantalla
     
-    agenda.all.forEach(contact => {
+    contacts.forEach(contact => {
       const article = document.createElement('article');
       // Se usa Template Literals para armar la tarjeta
       article.innerHTML = `
@@ -97,6 +126,14 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Se llama a render
   render();
+  
+  searchInput.addEventListener('input', (event) => {
+    const query = event.target.value;
+    const filteredResults = agenda.find(query);
+    
+    // Se usa el render que ya estaba, pero con los resultados filtrados
+    render(filteredResults);
+  })
 
   // Evento para abrir el modal
   addBtn.addEventListener("click", () => {
