@@ -429,3 +429,8 @@ yarn-error.log*
 
 # Local Database
 **/agenda.json
+
+# Vite / React specific
+tp3/dist/
+tp3/dist-ssr/
+*.local
