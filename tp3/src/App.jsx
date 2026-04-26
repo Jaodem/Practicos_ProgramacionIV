@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { loadAlumnos } from './services/alumnos';
 import { cmpNombre, includesContact } from './utils/text';
 import ContactCard from './components/ContactCard';
+import './App.css';
 import heroImg from './assets/hero.png';
 
 function App() {
@@ -41,41 +42,45 @@ function App() {
         Resultados: {filtered.length}
       </p>
       
-      <div className='contacts-grid'>
+      <div className='main-content'>
         {/* Sección de Favoritos */}
         {favorites.length > 0 && (
-          <section>
+          <section className='contacts-section'>
             <h2>
               Favoritos ({favorites.length})
             </h2>
-            {favorites.map(contact => (
-              <ContactCard
-                key={contact.id}
-                contact={contact}
-                onToggleFavorite={toggleFavorite}
-              />
-            ))}
+            <div className='contacts-grid'> {/* Grilla interna */}
+              {favorites.map(contact => (
+                <ContactCard
+                  key={contact.id}
+                  contact={contact}
+                  onToggleFavorite={toggleFavorite}
+                />
+              ))}
+            </div>
           </section>
         )}
         
         {/* Sección del Resto */}
-        <section>
+        <section className='contacts-section'>
           <h2>
             Contactos
           </h2>
-          {others.length > 0 ? (
-            others.map(contact => (
-              <ContactCard
-                key={contact.id}
-                contact={contact}
-                onToggleFavorite={toggleFavorite}
-              />
-            ))
-          ) : (
-              <p>
-                No se encontraron alumnos.
-              </p>
-          )}
+          <div className='contacts-grid'> {/* Grilla interna */}
+            {others.length > 0 ? (
+              others.map(contact => (
+                <ContactCard
+                  key={contact.id}
+                  contact={contact}
+                  onToggleFavorite={toggleFavorite}
+                />
+              ))
+            ) : (
+                <p>
+                  No se encontraron alumnos.
+                </p>
+            )}
+          </div>
         </section>
       </div>
     </div>

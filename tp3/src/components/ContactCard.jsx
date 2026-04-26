@@ -1,3 +1,5 @@
+import './ContactCard.css';
+
 const ContactCard = ({ contact, onToggleFavorite }) => {
   // Se contruye la URL del avatar o una por defecto
   const avatarUrl = contact.github
