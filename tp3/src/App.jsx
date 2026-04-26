@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { loadAlumnos } from './services/alumnos';
 import { cmpNombre, includesContact } from './utils/text';
 import ContactCard from './components/ContactCard';
+import Topbar from './components/Topbar';
 import './App.css';
 import heroImg from './assets/hero.png';
 
@@ -30,58 +31,56 @@ function App() {
   return (
     <div className="app-container">
       {/* Aquí irán los componentes */}
-      <h1>
-        Directorio de Alumnos
-      </h1>
-      <input
-        type='text'
-        placeholder='Buscar...'
-        onChange={(e) => setSearchQuery(e.target.value)}
+      <Topbar
+        query={searchQuery}
+        onSearch={setSearchQuery}
       />
-      <p>
-        Resultados: {filtered.length}
-      </p>
       
-      <div className='main-content'>
-        {/* Sección de Favoritos */}
-        {favorites.length > 0 && (
+      <div className='app-container'>
+        <div className='main-content'>
+          <p className='results-count'>
+            Resultados: {filtered.length}
+          </p>
+          {/* Sección de Favoritos */}
+          {favorites.length > 0 && (
+            <section className='contacts-section'>
+              <h2>
+                Favoritos ({favorites.length})
+              </h2>
+              <div className='contacts-grid'> {/* Grilla interna */}
+                {favorites.map(contact => (
+                  <ContactCard
+                    key={contact.id}
+                    contact={contact}
+                    onToggleFavorite={toggleFavorite}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+          
+          {/* Sección del Resto */}
           <section className='contacts-section'>
             <h2>
-              Favoritos ({favorites.length})
+              Contactos
             </h2>
             <div className='contacts-grid'> {/* Grilla interna */}
-              {favorites.map(contact => (
-                <ContactCard
-                  key={contact.id}
-                  contact={contact}
-                  onToggleFavorite={toggleFavorite}
-                />
-              ))}
+              {others.length > 0 ? (
+                others.map(contact => (
+                  <ContactCard
+                    key={contact.id}
+                    contact={contact}
+                    onToggleFavorite={toggleFavorite}
+                  />
+                ))
+              ) : (
+                  <p>
+                    No se encontraron alumnos.
+                  </p>
+              )}
             </div>
           </section>
-        )}
-        
-        {/* Sección del Resto */}
-        <section className='contacts-section'>
-          <h2>
-            Contactos
-          </h2>
-          <div className='contacts-grid'> {/* Grilla interna */}
-            {others.length > 0 ? (
-              others.map(contact => (
-                <ContactCard
-                  key={contact.id}
-                  contact={contact}
-                  onToggleFavorite={toggleFavorite}
-                />
-              ))
-            ) : (
-                <p>
-                  No se encontraron alumnos.
-                </p>
-            )}
-          </div>
-        </section>
+        </div>
       </div>
     </div>
   );
