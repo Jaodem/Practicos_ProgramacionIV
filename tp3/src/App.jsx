@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { loadAlumnos } from './services/alumnos';
 import { cmpNombre, includesContact } from './utils/text';
+import ContactCard from './components/ContactCard';
 import heroImg from './assets/hero.png';
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
   
   const filtered = contacts.filter(c => includesContact(c, searchQuery));
   
-  const favoritos = filtered.filter(c => c.favorito).sort(cmpNombre);
+  const favorites = filtered.filter(c => c.favorito).sort(cmpNombre);
   const others = filtered.filter(c => !c.favorito).sort(cmpNombre);
 
   return (
@@ -39,6 +40,44 @@ function App() {
       <p>
         Resultados: {filtered.length}
       </p>
+      
+      <div className='contacts-grid'>
+        {/* Sección de Favoritos */}
+        {favorites.length > 0 && (
+          <section>
+            <h2>
+              Favoritos ({favorites.length})
+            </h2>
+            {favorites.map(contact => (
+              <ContactCard
+                key={contact.id}
+                contact={contact}
+                onToggleFavorite={toggleFavorite}
+              />
+            ))}
+          </section>
+        )}
+        
+        {/* Sección del Resto */}
+        <section>
+          <h2>
+            Contactos
+          </h2>
+          {others.length > 0 ? (
+            others.map(contact => (
+              <ContactCard
+                key={contact.id}
+                contact={contact}
+                onToggleFavorite={toggleFavorite}
+              />
+            ))
+          ) : (
+              <p>
+                No se encontraron alumnos.
+              </p>
+          )}
+        </section>
+      </div>
     </div>
   );
 }
