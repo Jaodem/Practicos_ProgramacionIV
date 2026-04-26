@@ -10,14 +10,17 @@ Resolución de los trabajos prácticos de la materia **Programación IV (2026)**
 |----|--------|----------------------------------|--------|
 | **TP1** | Agenda de Contactos | Node.js, OOP, <br> JSON Persistence, ESM | ✅ Completado |
 | **TP2** | Agenda Web (SPA) | DOM, OOP, Pico.css, <br> ES Modules, Search Filter | ✅ Completado |
-| **TP3** | (Próximamente) | ... | ⏳ Pendiente |
+| **TP3** | Directorio Alumnos | React, Vite, CSS Modules, <br> Data Masking, VCF Parser | ✅ Completado |
 
 ---
 
 ## 🛠️ Tecnologías y Herramientas Generales
-- **Lenguajes y Web**: JavaScript (Node.js/Browser), TypeScript, HTML5, CSS3 (Pico.css).
+- **Lenguajes y Web**: JavaScript (Node.js/Browser), TypeScript, React 18+, HTML5, CSS3.
+- **Frameworks y Librerías**: React 18+, Node.js.
+- **Build Tools**: Vite, ES Modules.
+- **Estilos**: CSS3 (Pico.css, Glassmorphism, Responsive Grid).
 - **Entorno**: Linux (Fedora/Arch) utilizando el editor **Zed**.
-- **Conceptos**: Programación Orientada a Objetos (OOP), Manipulación del DOM, Persistencia de datos y Arquitecturas SPA.
+- **Conceptos**: Programación Orientada a Objetos (OOP), Hooks, Manipulación del DOM, Persistencia de datos y Privacidad de Datos (Masking).
 - **Versionado**: Git / GitHub con flujo de commits atómicos.
 
 ---
