@@ -1,6 +1,11 @@
 import './ContactCard.css';
 
 const ContactCard = ({ contact, onToggleFavorite }) => {
+  // Función para enmascarar el teléfono
+  const maskPhone = (phone) => {
+    if (!phone || phone === 'Sin teléfono') return phone;
+    return phone.substring(0, 3) + 'X'.repeat(phone.length - 3);
+  }
   // Se contruye la URL del avatar o una por defecto
   const avatarUrl = contact.github
     ? `https://github.com/${contact.github}.png?size=100`
@@ -23,7 +28,7 @@ const ContactCard = ({ contact, onToggleFavorite }) => {
           {contact.nombre}
         </h3>
         <p>
-          <strong>Tel:</strong> {contact.telefono}
+          <strong>Tel:</strong> {maskPhone(contact.telefono)}
         </p>
         <p>
           <strong>Legajo:</strong> {contact.legajo}
