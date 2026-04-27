@@ -23,7 +23,12 @@ with st.sidebar:
         
         # Selector de año
         years = dm.get_years()
-        selected_year = st.selectbox('Seleccioná un año', years)            
+        selected_year = st.selectbox('Seleccioná un año', years)
+        
+        # Validación de datos para el año seleccionado
+        if df[df['año'] == selected_year].empty:
+            st.warning('El año seleccionado no tiene datos para mostrar.')
+            st.stop()
     else:
         # Si no hay archivo, se muestra un mensaje y se detiene
         st.info('Subí un archivo CSV desde la barra lateral para comenzar.')
