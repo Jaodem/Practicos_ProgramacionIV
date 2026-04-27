@@ -434,3 +434,12 @@ yarn-error.log*
 tp3/dist/
 tp3/dist-ssr/
 *.local
+
+# --- Python Specific ---
+.venv/
+venv/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+.python-version
