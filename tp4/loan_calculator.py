@@ -21,3 +21,24 @@ class LoanCalculator:
         denominator = (1 + i) ** n -1
         
         return p * (numerator / denominator)
+        
+    def generate_amortization_schedule(self):
+        schedule = []
+        current_balance = self.principal
+        monthly_payment = self.calculate_monthly_installment()
+        periodic_rate = self.calculate_periodic_rate()
+        
+        for month in range(1, self.total_installments + 1):
+            interest_paid = current_balance * periodic_rate
+            capital_amortized = monthly_payment - interest_paid
+            current_balance -= capital_amortized
+            
+            schedule.append({
+                'month': month,
+                'payment': monthly_payment,
+                'capital': capital_amortized,
+                'interest': interest_paid,
+                'balance': max(0, current_balance) # Se evita números negativos
+            })
+            
+        return schedule
