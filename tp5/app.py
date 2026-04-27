@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 from data_manager import DataManager
 
 # Se configura la página
@@ -49,4 +50,28 @@ for product_name in products:
             st.metric("Costo promedio", f"${avg_cost:,.2f}")
             
         with col_chart:
-            st.write('Espacio para el gráfico')
+            # Se obtiene los datos mensuales para el gráfico
+            product_data = dm.get_filtered_data(selected_year, product_name)
+            
+            # Se crea la figura con el tamaño adecuado
+            fig, ax = plt.subplots(figsize=(8, 3))
+            
+            # Línea de precio promedio
+            ax.plot(product_data['mes'], product_data['unit_price'],
+                label='Precio promedio', color='#1f77b4', marker='o')
+            
+            # Línea de costo promedio
+            ax.plot(product_data['mes'], product_data['unit_cost'],
+                label='Costo promedio', color='#d62728', marker='o')
+            
+            # Configuración de ejes y títulos
+            ax.set_title('Evolución de precio y costo promedio')
+            ax.set_xlabel('Mes')
+            ax.set_ylabel('Monto')
+            
+            # Leyenda y cuadrícula
+            ax.legend()
+            ax.grid(True, linestyle='--', alpha=0.3)
+            
+            # Comando de Streamlit para mostrar la figura de Matplotlib
+            st.pyplot(fig)
