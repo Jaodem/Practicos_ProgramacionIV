@@ -15,3 +15,7 @@ class User(UserBase, table=True):
 # Esquema para la creación de usuarios
 class UserCreate(UserBase):
     password: str
+    
+class UserLogin(SQLModel):
+    email: str
+    password: str
