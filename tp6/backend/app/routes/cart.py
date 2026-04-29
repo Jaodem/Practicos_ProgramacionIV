@@ -53,30 +53,49 @@ def get_cart(session: Session = Depends(get_session)):
     cart = session.exec(statement).first()
     
     if not cart:
-        return {'items': [], 'total': 0}
+        return {
+            'items': [],
+            'subtotal': 0,
+            'tax': 0,
+            'shipping': 0,
+            'total': 0
+        }
 
-    # Se buscan los items y se une con la informacion del producto
     items_detail = []
-    total_cart = 0
+    subtotal_cart = 0.0
+    total_tax = 0.0
     
+    # Se obtienen los ítems del carrito
     item_statement = select(CartItem).where(CartItem.cart_id == cart.id)
     items = session.exec(item_statement).all()
     
     for item in items:
         product = session.get(Product, item.product_id)
         if product:
-            subtotal = product.price * item.quantity
-            total_cart += subtotal
+            # Se calcula el subtotal por producto
+            item_subtotal = product.price * item.quantity
+            subtotal_cart += item_subtotal
+            
+            # Se calcula el impuesto por producto
+            tax_rate = 0.10 if product.category.lower() == 'electronica' else 0.21
+            total_tax += item_subtotal * tax_rate
+            
             items_detail.append({
                 'product_id': product.id,
                 'name': product.name,
                 'price': product.price,
                 'quantity': item.quantity,
-                'subtotal': subtotal
+                'subtotal': round(item_subtotal, 2)
             })
-
+        
+    # Regla de envío: Gratis si el total supera 1000, sino $50
+    shipping_const = 0 if subtotal_cart > 1000 else 50
+    
     return {
         'cart_id': cart.id,
         'items': items_detail,
-        'total': round(total_cart, 2)
+        'subtotal': round(subtotal_cart, 2),
+        'tax': round(total_tax, 2),
+        'shipping': shipping_const,
+        'total': round(subtotal_cart + total_tax + shipping_const, 2)
     }
