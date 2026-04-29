@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm.instrumentation import state
 from sqlmodel import Session, select
 from app.database import get_session
 from app.models.cart import Cart, CartItem
@@ -99,3 +100,40 @@ def get_cart(session: Session = Depends(get_session)):
         'shipping': shipping_const,
         'total': round(subtotal_cart + total_tax + shipping_const, 2)
     }
+
+@router.post('/cancel')
+def cancel_cart(session: Session = Depends(get_session)):
+    # Se busca el carrito activo
+    statement = select(Cart).where(Cart.user_id == 1, Cart.status =='active')
+    cart = session.exec(statement).first()
+
+    if not cart:
+        raise HTTPException(status_code=404, detail='No hay carrito activo para cancelar')
+
+    # Se eliminan los items del carrito
+    item_statement = select(CartItem).where(CartItem.cart_id == cart.id)
+    items = session.exec(item_statement).all()
+
+    for item in items:
+        session.delete(item)
+
+    cart.status = 'cancelled'
+    session.add(cart)
+    session.commit()
+
+    return {'message': 'Compra cancelada y carrito vaciado'}
+
+@router.post('/checkout')
+def checkout(session: Session = Depends(get_session)):
+    # Se busca el carrito
+    statement = select(Cart).where(Cart.user_id == 1, Cart.status == 'active')
+    cart = session.exec(statement).first()
+
+    if not cart or not session.exec(select(CartItem).where(CartItem.cart_id == cart.id)).first():
+        raise HTTPException(status_code=400, detail='El carrito esta vacío')
+
+    cart.status = 'completed'
+    session.add(cart)
+    session.commit()
+
+    return {'message': 'Compra finalizada con éxito. ¡Gracias por tu compra!'}
