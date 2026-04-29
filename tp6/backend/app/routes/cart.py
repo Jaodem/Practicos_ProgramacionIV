@@ -1,9 +1,11 @@
+from webbrowser import get
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm.instrumentation import state
 from sqlmodel import Session, select
 from app.database import get_session
 from app.models.cart import Cart, CartItem
 from app.models.product import Product
+from app.models.purchase import Purchase
 
 router = APIRouter(prefix='/cart', tags=['Cart'])
 
@@ -132,8 +134,44 @@ def checkout(session: Session = Depends(get_session)):
     if not cart or not session.exec(select(CartItem).where(CartItem.cart_id == cart.id)).first():
         raise HTTPException(status_code=400, detail='El carrito esta vacío')
 
+    # Se calcula el total para el registro histórico
+    total_compra = 0.0
+    item_statement = select(CartItem).where(CartItem.cart_id == cart.id)
+    items = session.exec(item_statement).all()
+
+    if not items:
+        raise HTTPException(status_code=400, detail='El carrito no tiene productos')
+
+    for item in items:
+        product = session.get(Product, item.product_id)
+        if product:
+            subtotal = product.price * item.quantity
+            tax = 0.10 if product.category.lower() == 'electrónica' else 0.21
+            total_compra += subtotal * (1 + tax)
+
+    # Se suma el envío si corresponde
+    if total_compra < 1000:
+        total_compra += 50
+
+    if cart.id is None:
+        raise HTTPException(status_code=500, detail='Error de integridad en el carrito')
+
+    # Se crea el registro de compra
+    new_purchase = Purchase(
+        user_id=1,
+        cart_id=cart.id,
+        total_amount=round(total_compra, 2)
+    )
+    session.add(new_purchase)
+
     cart.status = 'completed'
     session.add(cart)
     session.commit()
 
     return {'message': 'Compra finalizada con éxito. ¡Gracias por tu compra!'}
+
+@router.get('/history')
+def get_puchase_history(session: Session = Depends(get_session)):
+    statement = select(Purchase).where(Purchase.user_id == 1)
+    purchases = session.exec(statement).all()
+    return purchases
