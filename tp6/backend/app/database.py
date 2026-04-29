@@ -1,5 +1,7 @@
-from sqlmodel import create_engine, SQLModel, Session
+from sqlmodel import create_engine, SQLModel, Session, select
 import os
+import json
+from app.models.product import Product
 
 sqlite_file_name = 'database.db'
 sqlite_url = f'sqlite:///{sqlite_file_name}'
@@ -15,3 +17,29 @@ def create_db_and_tables():
 def get_session():
     with Session(engine) as session:
         yield session
+
+def seed_products():
+    with Session(engine) as session:
+        # Se verifica si la tabla ya tiene datos
+        if session.exec(select(Product)).first():
+            return
+        
+        try:
+            with open('data/productos.json', 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                for item in data:
+                    # Se mapea manualmente JSON (en espñol) -> Modelo (inglés)
+                    product = Product(
+                        id=item['id'],
+                        name=item['titulo'],
+                        price=item['precio'],
+                        description=item['descripcion'],
+                        category=item['categoria'],
+                        stock=item['existencia']
+                    )
+                    session.add(product)
+                session.commit()
+                print('🌱 Datos iniciales cargados con éxito.')
+        except Exception as e:
+            session.rollback()
+            print(f'❌ Error al cargar productos: {e}')
