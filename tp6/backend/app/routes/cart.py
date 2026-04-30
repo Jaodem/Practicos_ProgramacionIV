@@ -175,3 +175,29 @@ def get_puchase_history(session: Session = Depends(get_session)):
     statement = select(Purchase).where(Purchase.user_id == 1)
     purchases = session.exec(statement).all()
     return purchases
+
+@router.delete('/remove/{product_id}')
+def remove_from_cart(product_id: int, session: Session = Depends(get_session)):
+    # Se busca el carrito activo
+    statement = select(Cart).where(Cart.user_id == 1, Cart.status == 'active')
+    cart = session.exec(statement).first()
+
+    if not cart:
+        raise HTTPException(status_code=404, detail='No hay un carrito activo')
+
+    # Se busca el ítem en el carrito
+    item_statement = select(CartItem).where(CartItem.cart_id == cart.id, CartItem.product_id == product_id)
+    cart_item = session.exec(item_statement).first()
+
+    if not cart_item:
+        raise HTTPException(status_code=404, detail='El producto no está en el carrito')
+
+    # Si hay más de uno, se resta 1. Si hay uno solo, se borra
+    if cart_item.quantity > 1:
+        cart_item.quantity -= 1
+        session.add(cart_item)
+    else:
+        session.delete(cart_item)
+
+    session.commit()
+    return {'message': 'Producto actualizado/eliminado del carrito'}
