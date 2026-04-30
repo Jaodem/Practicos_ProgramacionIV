@@ -145,6 +145,10 @@ def checkout(session: Session = Depends(get_session)):
     for item in items:
         product = session.get(Product, item.product_id)
         if product:
+            # Se actualiza el stock del producto
+            product.stock -= item.quantity
+            session.add(product)
+            
             subtotal = product.price * item.quantity
             tax = 0.10 if product.category.lower() == 'electrónica' else 0.21
             total_compra += subtotal * (1 + tax)
