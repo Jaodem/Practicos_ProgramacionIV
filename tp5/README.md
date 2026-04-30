@@ -32,11 +32,14 @@ Esta aplicación web interactiva, desarrollada con **Streamlit**, permite visual
    ```bash
    python -m venv .venv
    source .venv/bin/activate    # En Linux
+    ```
 
 3. **Instalar dependencias**:
    ```bash
    pip install streamlit pandas matplotlib
+    ```
 
 4. **Ejecutar la aplicación**:
    ```bash
    streamlit run app.py
+    ```

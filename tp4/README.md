@@ -20,15 +20,18 @@ Este programa es una herramienta de línea de comandos (CLI) desarrollada en Pyt
 1. Navegar a la carpeta del proyecto:
    ```bash
    cd tp4
+    ```
 
 2. Crear y activar el entorno virtual
    ```bash
    python -m venv .venv
    source .venv/bin/activate
+    ```
 
 3. Ejecutá la aplicación:
    ```bash
    python main.py
+    ```
 
 ## 📐 Estructura del Código
 - loan_calculator.py: Lógica financiera y fórmulas (Inglés).
