@@ -445,3 +445,9 @@ __pycache__/
 .python-version
 .env
 *.db
+
+# --- Next.js Specific ---
+tp6/frontend/.next/
+tp6/frontend/out/
+tp6/frontend/build/
+tp6/frontend/.env*.local
