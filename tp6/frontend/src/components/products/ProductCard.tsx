@@ -12,8 +12,18 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
   // Regla de negocio, si no hay stock, el producto esta agotado
   const isOutOfStock = product.stock <= 0;
 
+  // URL de FastApi
+  const BACKEND_URL = 'http://localhost:8000/static'
+
   return (
-    <Card className='flex flex-col h-full shadow-sm'>
+    <Card className='flex flex-col h-full shadow-sm overflow-hidden'>
+      <div className='relative h-64 w-full bg-white p-4 flex items-center justify-center border-b'>
+        <img
+          src={`${BACKEND_URL}/${product.image_url.replace('imagenes/', 'images/')}`}
+          alt={product.name}
+          className='max-h-full max-w-full object-contain'
+        />
+      </div>
       <CardHeader>
         <div className='flex justify-between items-start'>
           <Badge variant='outline' className='capitalize'>
