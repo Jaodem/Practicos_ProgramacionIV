@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.database import create_db_and_tables
 from contextlib import asynccontextmanager
@@ -18,6 +19,14 @@ app = FastAPI(
     title='TP6 E-commerce API',
     version='0.1.0',
     lifespan=lifespan
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['http://localhost:3000'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
 )
 
 app.mount('/static', StaticFiles(directory='static'), name='static')

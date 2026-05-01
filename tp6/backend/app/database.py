@@ -35,7 +35,8 @@ def seed_products():
                         price=item['precio'],
                         description=item['descripcion'],
                         category=item['categoria'],
-                        stock=item['existencia']
+                        stock=item['existencia'],
+                        image_url=item['imagen']
                     )
                     session.add(product)
                 session.commit()
