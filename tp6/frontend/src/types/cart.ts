@@ -7,7 +7,7 @@ export interface CartItemDetail {
 }
 
 export interface CartDetail {
-  cart_id: number;
+  cart_id?: number;
   items: CartItemDetail[];
   subtotal: number;
   tax: number;
