@@ -10,6 +10,8 @@ interface CartContextType {
   loading: boolean;
   addToCart: (productId: number, quantity?: number) => Promise<void>;
   removeFromCart: (productId: number) => Promise<void>;
+  cancelCart: () => Promise<void>;
+  confirmCheckout: () => Promise<void>;
   refreshCart: () => Promise<void>;
 }
 
@@ -57,6 +59,32 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const cancelCart = async () => {
+    try {
+      await cartService.cancel();
+      setCart(null);
+      toast.success('Compra cancelada y carrito vaciado');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Error al cancelar el carrito';
+      toast.error(message);
+    }
+  };
+
+  const confirmCheckout = async () => {
+    setLoading(true);
+    try {
+      await cartService.checkout();
+      setCart(null);
+      toast.success('Compra confirmada');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Error al confirmar la compra';
+      toast.error(message);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const initCart = async () => {
       await refreshCart();
@@ -65,7 +93,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <CartContext.Provider value={{ cart, loading, addToCart, removeFromCart, refreshCart }}>
+    <CartContext.Provider value={{
+      cart,
+      loading,
+      addToCart,
+      removeFromCart,
+      cancelCart,
+      confirmCheckout,
+      refreshCart
+    }}>
       {children}
     </CartContext.Provider>
   );

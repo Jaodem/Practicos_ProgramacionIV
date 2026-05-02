@@ -5,10 +5,12 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Button } from '@/components/ui/button';
 import { CartItem } from './CartItem';
 import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export function CartSidebar() {
-  const { cart, loading } = useCart();
+  const { cart, cancelCart, loading } = useCart();
   const { isLoggedIn } = useAuth();
+  const router = useRouter();
 
   if (!isLoggedIn) {
     return (
@@ -62,10 +64,20 @@ export function CartSidebar() {
             <span>Total</span>
             <span>${cart.total}</span>
           </div>
-          <Button className='w-full mt-4 cursor-pointer' size='lg'>
-            Continuar la compra
+          <Button
+            className='w-full mt-4 cursor-pointer'
+            size='lg'
+            disabled={loading}
+            onClick={() => router.push('/checkout')}
+          >
+            {loading ? 'Procesando...' : 'Continuar la compra'}
           </Button>
-          <Button variant='ghost' className='w-full text-xs text-muted-foreground cursor-pointer'>
+          <Button
+            variant='ghost'
+            className='w-full text-xs text-muted-foreground cursor-pointer'
+            disabled={loading}
+            onClick={cancelCart}
+          >
             Cancelar
           </Button>
         </CardFooter>
