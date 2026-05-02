@@ -80,7 +80,7 @@ def get_cart(session: Session = Depends(get_session)):
             subtotal_cart += item_subtotal
             
             # Se calcula el impuesto por producto
-            tax_rate = 0.10 if product.category.lower() == 'electronica' else 0.21
+            tax_rate = 0.10 if product.category.lower() == 'electrónica' else 0.21
             total_tax += item_subtotal * tax_rate
             
             items_detail.append({
@@ -88,7 +88,8 @@ def get_cart(session: Session = Depends(get_session)):
                 'name': product.name,
                 'price': product.price,
                 'quantity': item.quantity,
-                'subtotal': round(item_subtotal, 2)
+                'subtotal': round(item_subtotal, 2),
+                'image_url': product.image_url
             })
         
     # Regla de envío: Gratis si el total supera 1000, sino $50
