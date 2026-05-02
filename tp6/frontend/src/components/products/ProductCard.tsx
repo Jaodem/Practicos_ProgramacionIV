@@ -9,13 +9,17 @@ interface ProductCardProps {
   onAddToCart: (productId: number) => void;
 }
 
-export function ProductCard({ product, onAddToCart }: ProductCardProps) {
-  const { addToCart, loading } = useCart();
-  // Regla de negocio, si no hay stock, el producto esta agotado
-  const isOutOfStock = product.stock <= 0;
+export function ProductCard({ product }: ProductCardProps) {
+  const { addToCart, loading, cart } = useCart();
 
   // URL de FastApi
   const BACKEND_URL = 'http://localhost:8000/static'
+
+  const itemInCart = cart?.items.find(item => item.product_id === product.id);
+  const quantityInCart = itemInCart ? itemInCart.quantity : 0;
+
+  const availableStock = product.stock - quantityInCart;
+  const isOutOfStock = availableStock <= 0;
 
   return (
     <Card className='flex flex-col h-full shadow-sm overflow-hidden'>
@@ -51,14 +55,14 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
             ${product.price.toLocaleString()}
           </span>
           <p className={`text-xs mt-1 ${isOutOfStock ? 'text-red-500 font-semibold' : 'text-muted-foreground'}`}>
-            {isOutOfStock ? 'Sin unidades disponibles' : `Disponible: ${product.stock}`}
+            {isOutOfStock ? 'Sin unidades disponibles' : `Disponible: ${availableStock}`}
           </p>
         </div>
       </CardContent>
 
       <CardFooter>
         <Button
-          className='w-full'
+          className='w-full cursor-pointer'
           disabled={isOutOfStock || loading}
           onClick={() => addToCart(product.id)}
         >

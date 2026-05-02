@@ -12,6 +12,11 @@ export function CartItem({
   }) {
   const { addToCart, removeFromCart, loading } = useCart();
 
+  const handleRemove = () => {
+    if (item.quantity === 1) removeFromCart(item.product_id);
+    else removeFromCart(item.product_id);
+  }
+
   return (
     <div className='flex items-center gap-4 py-4 border-b'>
       <div className='w-16 h-16 bg-gray-100 rounded shrink-0'>
@@ -34,9 +39,9 @@ export function CartItem({
           <Button
             variant='outline'
             size='icon'
-            className='h-6 w-6'
+            className='h-6 w-6 cursor-pointer'
             disabled={loading}
-            onClick={() => removeFromCart(item.product_id)}
+            onClick={handleRemove}
           >
             <Minus className='h-3 w-3' />
           </Button>
@@ -46,7 +51,7 @@ export function CartItem({
           <Button
             variant='outline'
             size='icon'
-            className='h6- w-6'
+            className='h6- w-6 cursor-pointer'
             disabled={loading}
             onClick={() => addToCart(item.product_id, 1)}
           >

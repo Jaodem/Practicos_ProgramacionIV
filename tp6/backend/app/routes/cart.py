@@ -201,8 +201,10 @@ def remove_from_cart(product_id: int, session: Session = Depends(get_session)):
     if cart_item.quantity > 1:
         cart_item.quantity -= 1
         session.add(cart_item)
+        msg = 'Cantidad actualizada'
     else:
         session.delete(cart_item)
+        msg = 'Producto eliminado del carrito'
 
     session.commit()
-    return {'message': 'Producto actualizado/eliminado del carrito'}
+    return {'message': msg}

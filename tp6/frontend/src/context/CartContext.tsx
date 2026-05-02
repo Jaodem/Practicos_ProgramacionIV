@@ -46,9 +46,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const removeFromCart = async (productId: number) => {
     setLoading(true);
     try {
-      await cartService.removeFromCart(productId);
+      const res = await cartService.removeFromCart(productId);
       await refreshCart();
-      toast.success('Producto actualizado');
+      toast.success(res.message);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Error al actualizar';
       toast.error(message);

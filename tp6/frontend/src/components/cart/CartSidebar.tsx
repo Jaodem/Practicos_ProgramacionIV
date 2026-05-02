@@ -29,7 +29,7 @@ export function CartSidebar() {
           Tu Carrito
         </CardTitle>
       </CardHeader>
-      <CardContent className='space-y-4 max-h-[60vh] overflow-auto'>
+      <CardContent className='space-y-4 max-h-100 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 pr-2'>
         {cart?.items.length === 0 ? (
           <p className='text-sm text-center py-10 text-muted-foreground'>
             El carrito está vacío
@@ -62,10 +62,10 @@ export function CartSidebar() {
             <span>Total</span>
             <span>${cart.total}</span>
           </div>
-          <Button className='w-full mt-4' size='lg'>
+          <Button className='w-full mt-4 cursor-pointer' size='lg'>
             Continuar la compra
           </Button>
-          <Button variant='ghost' className='w-full text-xs text-muted-foreground'>
+          <Button variant='ghost' className='w-full text-xs text-muted-foreground cursor-pointer'>
             Cancelar
           </Button>
         </CardFooter>
