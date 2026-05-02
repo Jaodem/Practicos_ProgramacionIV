@@ -16,5 +16,22 @@ export const authService = {
     }
     
     return await res.json();
-  }
+  },
+
+  login: async (credentials: { email: string, password: string }) => {
+    const res = await fetch(`${API_URL}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
+    });
+
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.detail || 'Error al iniciar sesión');
+    }
+    
+    return await res.json();
+  },
 }
