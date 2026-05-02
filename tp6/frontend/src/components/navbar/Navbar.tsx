@@ -3,13 +3,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/context/AuthContext';
 
 export function Navbar() {
   const pathname = usePathname();
-
-  // Por ahora solamente simulamos un usuario logueado
-  const isLoggedIn = false;
-  const userName = 'Juan Perez'
+  const { user, isLoggedIn, logout } = useAuth();
 
   const getLinkStyles = (path: string) => {
     const isActive = pathname === path;
@@ -45,9 +43,14 @@ export function Navbar() {
                 Mis compras
               </Link>
               <span className='text-muted-foreground border-l pl-6'>
-                {userName}
+                {user}
               </span>
-              <Button variant='ghost' size='sm' className='font-bold text-red-500 hover:text-red-600 hover:bg-red-50'>
+              <Button
+                variant='ghost'
+                size='sm'
+                className='font-bold text-red-500 hover:text-red-600 hover:bg-red-50'
+                onClick={logout}
+              >
                 Salir
               </Button>
             </>

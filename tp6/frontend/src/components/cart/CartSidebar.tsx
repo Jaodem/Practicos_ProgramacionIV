@@ -4,11 +4,11 @@ import { useCart } from '@/context/CartContext';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CartItem } from './CartItem';
+import { useAuth } from '@/context/AuthContext';
 
 export function CartSidebar() {
   const { cart, loading } = useCart();
-
-  const isLoggedIn = true;
+  const { isLoggedIn } = useAuth();
 
   if (!isLoggedIn) {
     return (

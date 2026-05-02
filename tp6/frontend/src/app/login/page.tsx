@@ -9,12 +9,14 @@ import { Label } from '@/components/ui/label';
 import { authService } from '@/services/authService';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+  const { login } = useAuth();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -24,6 +26,7 @@ export default function LoginPage() {
 
     try {
       const res = await authService.login(formData);
+      login(res.user)
       toast.success(`¡Bienvenido, ${res.user}`);
 
       // Después se agregar el estado de sesión
