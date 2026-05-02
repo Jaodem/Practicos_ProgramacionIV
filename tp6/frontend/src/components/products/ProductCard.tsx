@@ -3,6 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 
 interface ProductCardProps {
   product: Product;
@@ -10,6 +11,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const { isLoggedIn } = useAuth();  
   const { addToCart, loading, cart } = useCart();
 
   // URL de FastApi
@@ -63,10 +65,13 @@ export function ProductCard({ product }: ProductCardProps) {
       <CardFooter>
         <Button
           className='w-full cursor-pointer'
-          disabled={isOutOfStock || loading}
+          disabled={!isLoggedIn || isOutOfStock || loading}
           onClick={() => addToCart(product.id)}
         >
-          {isOutOfStock ? 'Agotado' : loading ? 'Agregando...' : 'Agregar al carrito'}
+          {!isLoggedIn
+            ? (isOutOfStock ? 'Agotado' : 'Agregar al carrito')
+            : 'Iniciá sesión para comprar'
+          }
         </Button>
       </CardFooter>
     </Card>

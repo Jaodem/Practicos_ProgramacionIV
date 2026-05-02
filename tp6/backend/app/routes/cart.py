@@ -11,17 +11,25 @@ router = APIRouter(prefix='/cart', tags=['Cart'])
 
 @router.post('/add/{product_id}')
 def add_to_cart(product_id: int, quantity: int = 1, session: Session = Depends(get_session)):
+    current_user_id = 1
+
+    if not current_user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='Debés iniciar sesión para realizar esta acción'
+        )
+
     # Se buscar el producto y se valida el stock
     product = session.get(Product, product_id)
     if not product:
         raise HTTPException(status_code=404, detail='Producto no encontrado')
 
     # Se obtiene o se crea el acrrito activo para el usuario
-    statement = select(Cart).where(Cart.user_id == 1, Cart.status == 'active')
+    statement = select(Cart).where(Cart.user_id == current_user_id, Cart.status == 'active')
     cart = session.exec(statement).first()
     
     if not cart:
-        cart = Cart(user_id=1)
+        cart = Cart(user_id=current_user_id)
         session.add(cart)
         session.commit()
         session.refresh(cart)
