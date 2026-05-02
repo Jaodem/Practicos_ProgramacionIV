@@ -2,6 +2,7 @@ import { Product } from '@/types/product';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useCart } from '@/context/CartContext';
 
 interface ProductCardProps {
   product: Product;
@@ -9,6 +10,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, onAddToCart }: ProductCardProps) {
+  const { addToCart, loading } = useCart();
   // Regla de negocio, si no hay stock, el producto esta agotado
   const isOutOfStock = product.stock <= 0;
 
@@ -57,10 +59,10 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
       <CardFooter>
         <Button
           className='w-full'
-          disabled={isOutOfStock}
-          onClick={() => onAddToCart(product.id)}
+          disabled={isOutOfStock || loading}
+          onClick={() => addToCart(product.id)}
         >
-          {isOutOfStock ? 'Agotado' : 'Agregar al carrito'}
+          {isOutOfStock ? 'Agotado' : loading ? 'Agregando...' : 'Agregar al carrito'}
         </Button>
       </CardFooter>
     </Card>

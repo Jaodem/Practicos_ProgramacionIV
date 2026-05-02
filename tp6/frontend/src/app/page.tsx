@@ -5,6 +5,7 @@ import { Product } from '@/types/product';
 import { productService } from '@/services/productService';
 import { cartService } from '@/services/cartService';
 import { ProductCard } from '@/components/products/ProductCard';
+import { CartSidebar } from '@/components/cart/CartSidebar';
 import { toast } from 'sonner';
 
 export default function HomePage() {
@@ -69,15 +70,26 @@ export default function HomePage() {
         </p>
       </header>
 
-      {/* Grilla Responsiva */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onAddToCart={handleAddToCart}
-          />
-        ))}
+      {/* Grilla principal del Layout */}
+      <div className='grid grid-cols-1 lg:grid-cols-12 gap-8 items-start'>
+        {/* Sección de productos 8 columnas */}
+        <div className='lg:col-span-8'>
+          {/* Sección de productos */}
+          <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6'>
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onAddToCart={handleAddToCart}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Sección de Carrito 4 columnas */}
+        <aside className='lg:col-span-4 sticky top-4'>
+          <CartSidebar />
+        </aside>
       </div>
     </main>
   );

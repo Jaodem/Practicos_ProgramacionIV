@@ -9,6 +9,7 @@ interface CartContextType {
   cart: CartDetail | null;
   loading: boolean;
   addToCart: (productId: number, quantity?: number) => Promise<void>;
+  removeFromCart: (productId: number) => Promise<void>;
   refreshCart: () => Promise<void>;
 }
 
@@ -42,6 +43,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const removeFromCart = async (productId: number) => {
+    setLoading(true);
+    try {
+      await cartService.removeFromCart(productId);
+      await refreshCart();
+      toast.success('Producto actualizado');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Error al actualizar';
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const initCart = async () => {
       await refreshCart();
@@ -50,7 +65,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <CartContext.Provider value={{ cart, loading, addToCart, refreshCart }}>
+    <CartContext.Provider value={{ cart, loading, addToCart, removeFromCart, refreshCart }}>
       {children}
     </CartContext.Provider>
   );

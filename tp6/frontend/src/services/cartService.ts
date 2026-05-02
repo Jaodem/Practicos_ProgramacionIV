@@ -57,5 +57,20 @@ export const cartService = {
     }
     
     return res.json();
-  }
-}
+  },
+
+  removeFromCart: async (productId: number): Promise<{
+    message: string
+  }> => {
+    const res = await fetch(`${API_URL}/cart/remove/${productId}`, {
+      method: 'DELETE',
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.detail || 'Error al quitar el producto');
+    }
+
+    return res.json();
+  },
+};
