@@ -11,6 +11,14 @@ export function Navbar() {
   const isLoggedIn = false;
   const userName = 'Juan Perez'
 
+  const getLinkStyles = (path: string) => {
+    const isActive = pathname === path;
+    return `px-3 py-2 rounded-md transition-colors ${isActive
+        ? 'bg-secondary text-foreground font-bold'
+        : 'text-muted-foreground hover:bg-secondary/50 hover:text-primary'
+      }`;
+  };
+
   return (
     <nav className='border-b bg-white sticky top-0 z-50'>
       <div className='container mx-auto px-4 h-16 flex items-center justify-between'>
@@ -23,7 +31,7 @@ export function Navbar() {
         <div className='flex items-center gap-6 text-sm font-medium'>
           <Link
             href='/'
-            className={`transition-colors hover:text-primary ${pathname === '/' ? 'text-foreground' : 'text-muted-foreground'}`}
+            className={getLinkStyles('/')}
           >
             Productos
           </Link>
@@ -31,8 +39,8 @@ export function Navbar() {
           {isLoggedIn ? (
             <>
               <Link
-                href='/compras'
-                className={`transition-colors hover:text-primary ${pathname === '/compras' ? 'text-foreground' : 'text-muted-foreground'}`}
+                href='/purchase'
+                className={getLinkStyles('/purchase')}
               >
                 Mis compras
               </Link>
@@ -47,13 +55,17 @@ export function Navbar() {
               <>
                 <Link
                   href='/login'
-                  className={`transition-colors hover:text-primary ${pathname === '/login' ? 'text-foreground' : 'text-muted-foreground'}`}
+                  className={getLinkStyles('/login')}
                 >
                   Ingresar
                 </Link>
                 
-                <Link href='/registro'>
-                  <Button variant={pathname === '/registro' ? 'default' : 'secondary'} size='sm'>
+                <Link href='/register'>
+                  <Button
+                    variant={pathname === '/register' ? 'secondary' : 'ghost'}
+                    size='sm'
+                    className={`cursor-pointer font-bold ${pathname === '/register' ? 'bg-secondary' : ''}`}
+                  >
                     Crear cuenta
                   </Button>
                 </Link>
