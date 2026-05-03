@@ -8,28 +8,48 @@ import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { CheckCircle2 } from 'lucide-react';
 
 export default function CheckoutPage() {
   const { cart, confirmCheckout, loading } = useCart();
   const router = useRouter();
   const [shippingData, setShippingData] = useState({ address: '', card: '' });
+  const [isFinished, setIsFinished] = useState(false);
 
   const handleFinalize = async (e: React.FormEvent) => {
-    e.preventDefault(); // Evita que la página recargue
+    e.preventDefault();
         
     try {
       await confirmCheckout();
-      // El Toaster de éxito sale desde el Context, 
-      // pero esperamos 3 segundos para que el usuario lo vea
-      setTimeout(() => {
-        router.push('/');
-      }, 3000);
+      setIsFinished(true);
     } catch (error) {
       // El error ya lo maneja el toast en el context
     }
   };
 
-  if (!cart || cart.items.length === 0) {
+  if (isFinished) {
+    return (
+      <div className="container mx-auto py-20 px-4 flex flex-col items-center justify-center text-center space-y-6">
+        <CheckCircle2 className="w-20 h-20 text-green-500 animate-in zoom-in duration-300" />
+        <div className="space-y-2">
+          <h2 className="text-4xl font-bold text-[#0f172a]">
+            ¡Compra realizada con éxito!
+          </h2>
+          <p className="text-muted-foreground text-lg">
+            Gracias por confiar en nosotros. Tu pedido ya está siendo procesado.
+          </p>
+        </div>
+        <Button 
+          onClick={() => router.push('/')} 
+          className="bg-[#0f172a] text-white py-6 px-10 text-lg font-bold cursor-pointer transition-transform hover:scale-105"
+        >
+          Volver a la tienda
+        </Button>
+      </div>
+    );
+  }
+
+  if (!isFinished && (!cart || cart.items.length === 0)) {
     return (
       <div className='container mx-auto py-20 text-center'>
         <h2 className='text-2xl font-bold'>
@@ -43,13 +63,12 @@ export default function CheckoutPage() {
   }
   
   return (
-    <div className='container mx-auto py-10 px-4 max-w-6xl'> {/* Centrado con max-width */}
+    <div className='container mx-auto py-10 px-4 max-w-6xl'>
       <h1 className='text-3xl font-bold mb-8 text-left'>
         Finalizar compra
       </h1>
       
       <form onSubmit={handleFinalize} className='grid grid-cols-1 md:grid-cols-3 gap-8'>
-        {/* Columna Izquierda: Resumen (Más grande: col-span-2) */}
         <Card className='md:col-span-2 shadow-sm border-gray-200'>
           <CardHeader>
             <CardTitle className='text-2xl font-bold'>
@@ -57,11 +76,11 @@ export default function CheckoutPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className='space-y-6 pb-6'>
-            {cart.items.map((item) => (
+            {cart?.items.map((item) => (
               <div key={item.product_id} className='flex justify-between items-start border-b border-gray-100 pb-4'>
                 <div className='space-y-1'>
-                  <p className='font-bold text-lg'>{
-                    item.name}
+                  <p className='font-bold text-lg'>
+                    {item.name}
                   </p>
                   <p className='text-sm text-muted-foreground'>
                     Cantidad: {item.quantity}
@@ -76,23 +95,22 @@ export default function CheckoutPage() {
             ))}
             
             <div className='pt-4 space-y-2 text-base'>
-              <div className='flex justify-between italic text-muted-foreground'>
-                <span>Total productos:</span> <span>${cart.subtotal.toFixed(2)}</span>
+              <div className='flex justify-between text-muted-foreground'>
+                <span>Total productos:</span> <span>${cart?.subtotal.toFixed(2)}</span>
               </div>
-              <div className='flex justify-between italic text-muted-foreground'>
-                <span>IVA:</span> <span>${cart.tax.toFixed(2)}</span>
+              <div className='flex justify-between text-muted-foreground'>
+                <span>IVA:</span> <span>${cart?.tax.toFixed(2)}</span>
               </div>
-              <div className='flex justify-between italic text-muted-foreground'>
-                <span>Envío:</span> <span>${cart.shipping.toFixed(2)}</span>
+              <div className='flex justify-between text-muted-foreground'>
+                <span>Envío:</span> <span>${cart?.shipping.toFixed(2)}</span>
               </div>
               <div className='flex justify-between text-3xl font-bold pt-4 border-t border-gray-200 mt-4'>
-                <span>Total a pagar:</span> <span>${cart.total.toFixed(2)}</span>
+                <span>Total a pagar:</span> <span>${cart?.total.toFixed(2)}</span>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Columna Derecha: Datos de envío */}
         <Card className='h-fit shadow-sm border-gray-200'>
           <CardHeader>
             <CardTitle className='text-2xl font-bold'>
@@ -119,7 +137,7 @@ export default function CheckoutPage() {
               </Label>
               <Input 
                 id='card'
-                placeholder='Ingresá tu tarjeta'
+                placeholder='Solo números'
                 className='bg-white border-gray-300'
                 required
                 pattern='[0-9]{13,19}'
@@ -130,7 +148,7 @@ export default function CheckoutPage() {
               />
             </div>
             <Button 
-              type='submit' // Activador del form
+              type='submit'
               className='w-full bg-[#0f172a] text-white hover:bg-[#1e293b] mt-4 py-6 text-lg font-bold cursor-pointer'
               disabled={loading}
             >
