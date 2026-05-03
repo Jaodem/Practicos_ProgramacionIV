@@ -32,4 +32,4 @@ Para previsualizar la aplicación correctamente (debido al uso de ES Modules):
    ```bash
    python3 -m http.server 8080
     ```
-3. Abrir el navegador en: http://localhost:8080/ejercicio.html
+3. Abrir el navegador en: `http://localhost:8080/ejercicio.html`

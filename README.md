@@ -6,14 +6,14 @@ Resolución de los trabajos prácticos de la materia **Programación IV (2026)**
 
 ## 📚 Contenido de los prácticos
 
-| Nº | Nombre | Tecnologías / Temas principales | Estado |
-|----|--------|----------------------------------|--------|
-| **TP1** | Agenda de Contactos | Node.js, OOP, <br> JSON Persistence, ESM | ✅ Completado |
-| **TP2** | Agenda Web (SPA) | DOM, OOP, Pico.css, <br> ES Modules, Search Filter | ✅ Completado |
-| **TP3** | Directorio Alumnos | React, Vite, CSS Modules, <br> Data Masking, VCF Parser | ✅ Completado |
-| **TP4** | Calculadora de Préstamos | Python, OOP, <br> CLI, Financial Logic | ✅ Completado |
-| **TP5** | Reporte de Productos | Python, Streamlit, <br> Pandas, Matplotlib | ✅ Completado |
-| **TP6** | **E-Commerce Shop** | **FastAPI, Next.js 15, SQLModel, <br> Shadcn UI, Tailwind CSS** | ✅ Completado |
+| Nº | Nombre | Tecnologías / Temas principales |
+|----|--------|----------------------------------|
+| **TP1** | Agenda de Contactos | Node.js, OOP, <br> JSON Persistence, ESM |
+| **TP2** | Agenda Web (SPA) | DOM, OOP, Pico.css, <br> ES Modules, Search Filter |
+| **TP3** | Directorio Alumnos | React, Vite, CSS Modules, <br> Data Masking, VCF Parser |
+| **TP4** | Calculadora de Préstamos | Python, OOP, <br> CLI, Financial Logic |
+| **TP5** | Reporte de Productos | Python, Streamlit, <br> Pandas, Matplotlib |
+| **TP6** | **E-Commerce Shop** | **FastAPI, Next.js 15, SQLModel, <br> Shadcn UI, Tailwind CSS** |
 
 ---
 

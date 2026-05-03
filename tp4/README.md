@@ -34,6 +34,6 @@ Este programa es una herramienta de línea de comandos (CLI) desarrollada en Pyt
     ```
 
 ## 📐 Estructura del Código
-- loan_calculator.py: Lógica financiera y fórmulas (Inglés).
-- cli_interface.py: Interacción con el usuario y formato de salida (Inglés/Español).
-- main.py: Punto de entrada y orquestador del programa (Inglés).
+- `loan_calculator.py`: Lógica financiera y fórmulas (Inglés).
+- `cli_interface.py`: Interacción con el usuario y formato de salida (Inglés/Español).
+- `main.py: Punto de entrada y orquestador del programa (Inglés).

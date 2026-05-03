@@ -27,6 +27,7 @@ Esta aplicación web interactiva, desarrollada con **Streamlit**, permite visual
    ```bash
    git clone <url-de-tu-repo>
    cd Practicos_ProgramacionIV/tp5
+    ```
 
 2. **Configurar el entorno virtual**:
    ```bash
