@@ -25,7 +25,7 @@ export function CartSidebar() {
   }
 
   return (
-    <Card className='sticky top-4'>
+    <Card className='sticky top-4 border-slate-300 shadow-sm'>
       <CardHeader>
         <CardTitle className='text-lg'>
           Tu Carrito
@@ -47,7 +47,7 @@ export function CartSidebar() {
       </CardContent>
 
       {cart && cart.items.length > 0 && (
-        <CardFooter className='flex-col border-t pt-4 gap-2'>
+        <CardFooter className='flex-col border-t border-slate-200 pt-4 gap-2'>
           <div className='flex justify-between w-full text-sm'>
             <span>Subtotal</span>
             <span>${cart.subtotal}</span>

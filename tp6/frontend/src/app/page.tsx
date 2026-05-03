@@ -6,12 +6,17 @@ import { productService } from '@/services/productService';
 import { cartService } from '@/services/cartService';
 import { ProductCard } from '@/components/products/ProductCard';
 import { CartSidebar } from '@/components/cart/CartSidebar';
+import Filter from '@/components/filters/Filter';
 import { toast } from 'sonner';
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Estados de los filtros
+  const [searchTerm, setSearchTerm] = useState('');
+  const [category, setCategory] = useState('all');
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -39,6 +44,12 @@ export default function HomePage() {
       toast.error(`No se pudo añadir: ${message}`);
     }
   };
+
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = category === 'all' || product.category.toLowerCase() === category.toLowerCase();
+    return matchesSearch && matchesCategory;
+  });
 
   if (loading) {
     return (
@@ -70,23 +81,28 @@ export default function HomePage() {
         </p>
       </header>
 
-      {/* Grilla principal del Layout */}
+      {/* Insertamos el componente Filter pasándole los setters de los estados */}
+      <Filter onSearch={setSearchTerm} onCategoryChange={setCategory} />
+
       <div className='grid grid-cols-1 lg:grid-cols-12 gap-8 items-start'>
-        {/* Sección de productos 8 columnas */}
         <div className='lg:col-span-8'>
-          {/* Sección de productos */}
           <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6'>
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
                 onAddToCart={handleAddToCart}
               />
             ))}
+            {/* Feedback visual si no hay resultados */}
+            {filteredProducts.length === 0 && (
+              <p className='col-span-full text-center py-10 text-muted-foreground'>
+                No se encontraron productos que coincidan con tu búsqueda.
+              </p>
+            )}
           </div>
         </div>
 
-        {/* Sección de Carrito 4 columnas */}
         <aside className='lg:col-span-4 sticky top-4'>
           <CartSidebar />
         </aside>
