@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.database import create_db_and_tables
 from contextlib import asynccontextmanager
-from app.routes import auth, product, cart
+from app.routes import auth, product, cart, purchase
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -33,6 +33,7 @@ app.mount('/static', StaticFiles(directory='static'), name='static')
 app.include_router(auth.router)
 app.include_router(product.router)
 app.include_router(cart.router)
+app.include_router(purchase.router)
 
 @app.get('/', tags=['Root'])
 def read_root():
