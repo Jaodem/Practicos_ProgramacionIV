@@ -8,7 +8,7 @@ from app.models.purchase import Purchase
 
 router = APIRouter(prefix='/purchase', tags=['Purchase'])
 
-@router.get('history')
+@router.get('/history')
 def get_purchase_history(session: Session = Depends(get_session)):
     statement = select(Purchase).where(Purchase.user_id == 1).order_by(desc(Purchase.date))
     purchases = session.exec(statement).all()
@@ -107,9 +107,3 @@ def checkout(session: Session = Depends(get_session)):
     session.commit()
 
     return {'message': 'Compra finalizada con éxito. ¡Gracias por tu compra!'}
-
-@router.get('/history')
-def get_puchase_history(session: Session = Depends(get_session)):
-    statement = select(Purchase).where(Purchase.user_id == 1)
-    purchases = session.exec(statement).all()
-    return purchases
