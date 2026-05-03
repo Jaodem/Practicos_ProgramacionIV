@@ -47,7 +47,7 @@ export const cartService = {
   checkout: async (): Promise<{
     message: string
   }> => {
-    const res = await fetch(`${API_URL}/cart/checkout`, {
+    const res = await fetch(`${API_URL}/purchase/checkout`, {
       method: 'POST',
     });
 
