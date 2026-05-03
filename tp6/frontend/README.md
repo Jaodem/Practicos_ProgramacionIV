@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛒 TP6 Shop - Frontend
 
-## Getting Started
+Este es el frontend de la plataforma de gestión de ventas y catálogo de productos "Tejada Hnos". La aplicación está construida con **Next.js 15**, utilizando una arquitectura de componentes modulares y un sistema de diseño basado en **Shadcn UI** y **Tailwind CSS**.
 
-First, run the development server:
+## 🚀 Tecnologías Principales
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Lenguaje**: TypeScript (Tipado estricto)
+- **Estilos**: Tailwind CSS + Shadcn UI (Componentes Radix UI)
+- **Iconografía**: Lucide React
+- **Gestión de Fechas**: `date-fns` para formateo localizado (es-AR)
+- **Notificaciones**: Sonner (Toasts)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Características Implementadas
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1. Catálogo Dinámico y Filtros
+- Renderizado de productos con stock actualizado en tiempo real.
+- **Sistema de Búsqueda**: Filtrado contextual por contenido de texto y categorías (Electrónica, Joyería, Ropa).
+- El buscador es inteligente: solo se muestra en la vista principal de productos.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 2. Gestión de Carrito (Context API)
+- Carrito persistente mediante `CartContext`.
+- Sidebar interactivo con cálculo automático de:
+  - Subtotal.
+  - IVA diferenciado (10% Electrónica, 21% General).
+  - Costo de envío (Dinámico: $50 si el total < $1000, gratis superando ese monto).
 
-## Learn More
+### 3. Historial de Compras
+- Vista detallada de compras anteriores.
+- Diseño de dos columnas: listado con scroll independiente y panel de detalle tipo "ticket".
+- Integración con el backend para recuperar detalles precisos de productos comprados, direcciones y métodos de pago (simulados).
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ Configuración para Desarrollo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Como este proyecto utiliza componentes de **Shadcn UI**, asegurate de tener las dependencias instaladas.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Instalar dependencias**:
+   ```bash
+   npm install
+    ```
 
-## Deploy on Vercel
+2. **Levantar el servidor de desarrollo**:
+   ```bash
+   npm run dev
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Variables de entorno**:
+  Asegurate de que el archivo `.env.local` apunte correctamente a tu backend de FastAPI:
+   ```bash
+   NEXT_PUBLIC_API_URL=http://localhost:8000
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📂 Estructura del Proyecto
+- `src/app/`: Rutas principales (`/`, `/purchase`, `/checkout`).
+- src/components/`:
+  - `filters/`: Componentes de búsqueda y selección.
+  - `products/`: Cards y listados de productos.
+  - `cart/`: Lógica de la barra lateral y gestión de items.
+  - `ui/`: Componentes base de Shadcn (Input, Select, Button, Card, etc.).
+- `src/context/`: Proveedores de estado global (`AuthContext`, `CartContext`).
+- src/services/`: Capa de abstracción para peticiones a la API (FastAPI).
+
+## 🎨 Tematización
+El entorno de desarrollo está optimizado para una visualización clara y profesional. Se han reforzado los contrastes de bordes (`border-slate-300`) y sombras para garantizar una jerarquía visual coherente en todas las resoluciones.
